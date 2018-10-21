@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+<meta charset="UTF-8">	
+
+</head>
+<body>
+
+<label for="files">Selecione é os arquivos do Karaoke: </label><input type="file" id="files" name="files[]" multiple />
+
+<br/>
+<br/>
+<br/>
+<br/>
+<table align="center" border="0" width="100%">
+	<tr>
+		<td align="center">
+			<input type="text" name="musica" id="musica"></input>
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+			<output id="list"></output>			
+		</td>
+	</tr>
+</table>
+
+<script>
+
+	var filesGlobal = []
+
+	function imprimeLista(listFiles) {
+		document.getElementById('list').innerHTML = '';
+
+		//Pega os nomes dos arquivos
+		var output = [];
+		for (var i = 0, f; f = listFiles[i]; i++) {
+			output.push(f.name);
+		}
+
+		var itemFiles = [];
+		for (var i = output.length - 1; i >= 0; i--) {
+	    	itemFiles.push('<li>',output[i],' - <strong><a href="',output[i],'" target="_blank">Abrir</a></strong></li>');
+	    }
+	    document.getElementById('list').innerHTML = '<ul>' + itemFiles.join('') + '</ul>';	
+	}
+
+	function selectFiles(evt) {
+		var files = evt.target.files;
+
+		filesGlobal = files;
+
+		imprimeLista(files);
+	}
+
+	
+	function filtraLista(evt) {
+		var strToTest = document.getElementById('musica').value;
+		var filesFiltred = [];
+		for (var i = 0; i < filesGlobal.length; i++) {
+			var actualFile = filesGlobal[i].name;
+				console.log(i + " - " + actualFile + " - " + strToTest + " - " + actualFile.indexOf(strToTest));
+			if (actualFile.toUpperCase().indexOf(strToTest.toUpperCase()) >= 0) {
+				filesFiltred.push(filesGlobal[i]);
+			}
+		}
+
+		document.getElementById('musica').value = strToTest;
+		imprimeLista(filesFiltred);
+		console.log(strToTest + "- " + filesFiltred);
+	}
+
+	document.getElementById('files').addEventListener('change', selectFiles, false);
+
+	document.getElementById('musica').addEventListener('keyup', filtraLista);
+
+
+
+</script>
+
+
+
+</body>
+</html>
